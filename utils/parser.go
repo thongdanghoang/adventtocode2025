@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// ExtractInts extracts all integers from a string.
 func ExtractInts(line string) []int {
 	re := regexp.MustCompile(`-?\d+`)
 	matches := re.FindAllString(line, -1)
@@ -17,6 +18,7 @@ func ExtractInts(line string) []int {
 	return res
 }
 
+// ParsePattern parses a line using a regex pattern.
 func ParsePattern(line string, pattern string) []string {
 	re := regexp.MustCompile(pattern)
 	matches := re.FindStringSubmatch(line)
