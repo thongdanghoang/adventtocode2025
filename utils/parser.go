@@ -3,6 +3,7 @@ package utils
 import (
 	"regexp"
 	"strconv"
+	"unicode"
 )
 
 // ExtractInts extracts all integers from a string.
@@ -28,4 +29,28 @@ func ParsePattern(line string, pattern string) []string {
 	}
 
 	return matches[1:]
+}
+
+func FindLargestDigit(s string) (int, int) {
+	maxDigit := -1
+	index := -1
+
+	for i, r := range s {
+		if unicode.IsDigit(r) {
+			digit := int(r - '0')
+			if digit > maxDigit {
+				maxDigit = digit
+				index = i
+			}
+		}
+	}
+
+	return maxDigit, index
+}
+
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }

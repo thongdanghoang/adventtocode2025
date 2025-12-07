@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
 /**
 * go run gen.go 05
-* Tạo ra day05/main.go và day05/input.txt
+* create day05/main.go, day05/input.txt and day05/README.md
  */
 
 const mainTemplate = `package main
@@ -64,6 +65,13 @@ func main() {
 	if _, err := os.Stat(inputFile); os.IsNotExist(err) {
 		os.WriteFile(inputFile, []byte(""), 0644)
 		fmt.Printf("Created %s\n", inputFile)
+	}
+	mainTemplate := strings.Replace(mainTemplate, "utils.ReadLines(\"input.txt\")", "utils.ReadLines(\""+dirName+"/input.txt\")", -1)
+
+	readmeFile := filepath.Join(dirName, "README.md")
+	if _, err := os.Stat(readmeFile); os.IsNotExist(err) {
+		os.WriteFile(readmeFile, []byte(""), 0644)
+		fmt.Printf("Created %s\n", readmeFile)
 	}
 
 	mainFile := filepath.Join(dirName, "main.go")
