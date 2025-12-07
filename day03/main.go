@@ -18,6 +18,9 @@ func main() {
 
 	start = time.Now()
 	fmt.Printf("Part 2: %v (took %v)\n", Part2(input), time.Since(start))
+
+	start = time.Now()
+	fmt.Printf("Part 2 Optimal: %v (took %v)\n", Part2Optimal(input), time.Since(start))
 }
 
 func Part1(input []string) int {
@@ -39,7 +42,6 @@ func Part2(input []string) int {
 
 	for i := 0; i < len(input); i++ {
 		currentTotal := utils.ToInt(findLargestNumberOf(input[i], nDigits))
-		fmt.Println(currentTotal)
 		total += currentTotal
 	}
 	return total
@@ -64,4 +66,42 @@ func findLargestNumberOf(input string, nDigits int) string {
 		}
 	}
 	return result
+}
+
+func Part2Optimal(input []string) int {
+	nDigits := 12
+	var total int
+
+	for i := 0; i < len(input); i++ {
+		currentTotal := utils.ToInt(findLargestNumberOfMonotonicStack(input[i], nDigits))
+		total += currentTotal
+	}
+	return total
+}
+
+func findLargestNumberOfMonotonicStack(input string, nDigits int) string {
+	if len(input) < nDigits {
+		return "0"
+	}
+
+	dropQuota := len(input) - nDigits
+
+	stack := make([]byte, 0, len(input))
+
+	for i := 0; i < len(input); i++ {
+		char := input[i]
+
+		for len(stack) > 0 && dropQuota > 0 && char > stack[len(stack)-1] {
+			stack = stack[:len(stack)-1]
+			dropQuota--
+		}
+
+		stack = append(stack, char)
+	}
+
+	if len(stack) > nDigits {
+		stack = stack[:nDigits]
+	}
+
+	return string(stack)
 }
