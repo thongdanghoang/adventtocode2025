@@ -25,7 +25,8 @@ func main() {
 	// lines := utils.ReadLines("input.txt") // line by line
 	// grid := utils.ReadGrid("input.txt")   // map 2D [][]rune
 	
-	input := utils.ReadLines("input.txt")
+	input := utils.ReadLines("example-input.txt")
+	// input := utils.ReadLines("input.txt")
 	
 	start := time.Now()
 	fmt.Printf("Part 1: %v (took %v)\n", Part1(input), time.Since(start))
@@ -67,6 +68,12 @@ func main() {
 		fmt.Printf("Created %s\n", inputFile)
 	}
 	mainTemplate := strings.Replace(mainTemplate, "utils.ReadLines(\"input.txt\")", "utils.ReadLines(\""+dirName+"/input.txt\")", -1)
+	exampleInputFile := filepath.Join(dirName, "example-input.txt")
+	if _, err := os.Stat(exampleInputFile); os.IsNotExist(err) {
+		os.WriteFile(exampleInputFile, []byte(""), 0644)
+		fmt.Printf("Created %s\n", exampleInputFile)
+	}
+	mainTemplate = strings.Replace(mainTemplate, "utils.ReadLines(\"example-input.txt\")", "utils.ReadLines(\""+dirName+"/example-input.txt\")", -1)
 
 	readmeFile := filepath.Join(dirName, "README.md")
 	if _, err := os.Stat(readmeFile); os.IsNotExist(err) {
