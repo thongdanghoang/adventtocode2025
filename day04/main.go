@@ -72,11 +72,13 @@ func replace(input [][]rune) {
 }
 
 func Part2(input [][]rune) int {
-	var currentCount = count(input)
+	currentCount := count(input)
 	replace(input)
-	for count(input) > currentCount {
-		currentCount = count(input)
+	next := count(input)
+	for next > currentCount {
+		currentCount = next
 		replace(input)
+		next = count(input)
 	}
-	return count(input)
+	return currentCount
 }
