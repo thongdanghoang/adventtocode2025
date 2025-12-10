@@ -19,7 +19,61 @@ func main() {
 }
 
 func Part2(input []string) int {
+	points := parseInput(input)
+	distances := generateSortedDistances(points)
+	parent := initUnionFind(len(points))
+
+	numComponents := len(points)
+
+	for _, d := range distances {
+		root1 := findRoot(parent, d.idx1)
+		root2 := findRoot(parent, d.idx2)
+
+		if root1 != root2 {
+			parent[root2] = root1
+			numComponents--
+
+			if numComponents == 1 {
+				return points[d.idx1].x * points[d.idx2].x
+			}
+		}
+	}
+
 	return 0
+}
+
+func parseInput(input []string) []Point {
+	points := make([]Point, 0)
+	for _, line := range input {
+		coords := utils.ExtractInts(line)
+		if len(coords) >= 3 {
+			points = append(points, Point{coords[0], coords[1], coords[2]})
+		}
+	}
+	return points
+}
+
+func generateSortedDistances(points []Point) []Distance {
+	distances := make([]Distance, 0)
+	for i := 0; i < len(points); i++ {
+		for j := i + 1; j < len(points); j++ {
+			dist := calculateDistanceByPoint(points[i], points[j])
+			distances = append(distances, Distance{points[i], points[j], i, j, dist})
+		}
+	}
+
+	sort.Slice(distances, func(i, j int) bool {
+		return distances[i].distance < distances[j].distance
+	})
+	return distances
+}
+
+func initUnionFind(size int) []int {
+	parent := make([]int, size)
+	for i := range parent {
+		parent[i] = i
+	}
+	return parent
 }
 
 func Part1(input []string) int {
